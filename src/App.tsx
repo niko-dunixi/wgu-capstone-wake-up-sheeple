@@ -215,6 +215,16 @@ function App() {
                           </CardContent>
                         </Card>
                       </Grid>
+                      <Grid item xs={12} alignContent='center'>
+                        <Card>
+                          <CardHeader title='Example Queries'/>
+                          <CardContent>
+                            <Button variant='contained'>Default Placeholder Query</Button>
+                            <Button variant='contained'>Show Predicted Alien Senetors in the 103rd Congress</Button>
+                            
+                          </CardContent>
+                        </Card>
+                      </Grid>
                     </Grid>
                   </Box>
                 </Paper>

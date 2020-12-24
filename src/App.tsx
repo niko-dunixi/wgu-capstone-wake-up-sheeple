@@ -171,10 +171,10 @@ const App:FunctionComponent<{}> = ({}) => {
         <Toolbar>
           <Grid container justify='space-between'>
             <Grid item>
-              <Typography variant='h4'>Wake Up Sheeple!</Typography>
+              <Typography variant='h4'>Wake Up Sheeple! 🐑</Typography>
             </Grid>
             <Grid item>
-              <Typography variant='h5'>Paul Baker's WGU Capstone Project</Typography>
+              <Typography variant='h5'>🦉 Paul Baker's WGU Capstone Project</Typography>
             </Grid>
           </Grid>
         </Toolbar>
@@ -184,7 +184,7 @@ const App:FunctionComponent<{}> = ({}) => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Box m={boxMargin}>
-                They walk amongst us. They want to rule us. The lizard-people are in the US Government.
+                They walk amongst us. They want to rule us. The lizard-people are in the US Government and they want a New World Order. 🦎
               </Box>
               <Box m={boxMargin} p={3}>
                 <Typography variant='caption'>

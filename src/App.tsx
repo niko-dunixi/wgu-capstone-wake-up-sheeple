@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell} from '@material-ui/core';
+import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent} from '@material-ui/core';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
               <Typography variant='h4'>Wake Up Sheeple!</Typography>
             </Grid>
             <Grid item>
-              <Typography variant='h5'>A WGU Capstone Project</Typography>
+              <Typography variant='h5'>Paul Baker's WGU Capstone Project</Typography>
             </Grid>
           </Grid>
         </Toolbar>
@@ -25,6 +25,11 @@ function App() {
                   They walk amongst us. They want to rule us. The lizard-people are in the US Government.
                 </p>
                 <p>
+                  <Typography variant='caption'>
+                    NOTE: This page and all it's related data are for the senses of Humans only. By interacting with this page and its related APIs you agree that you are Human. Non-humans must close the page, because they are bound and compeled to do so.
+                  </Typography>
+                </p>
+                <p>
                   <Link href='https://web.archive.org/web/20021010174545/http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>In 2002</Link>, <Link href='http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>a brave and very credible website</Link> leaked a list of known agents in the 107th congress. We can use this list and couple it with machine learning techniques to determine based on voting patterns who is and isn't a malicious actor. The known factions (our target classification for any given senator) are <code>REPTILE</code>, <code>ALIEN</code>, <code>PLEIADEAN</code>, and <code>HUMAN</code>.
                 </p>
                 <p>
@@ -32,7 +37,7 @@ function App() {
                   <ol>
                     <li>Aggregate legislation from all congresses and classify it</li>
                     <ul>
-                      <li>This requires visiting <Link href='senate.gov' target='_blank'>senate.gov</Link> for a catalog of legislation, and then visiting <Link href='congress.gov' target='_blank'>congress.gov</Link> for the actual text contents of legislation</li>
+                      <li>This requires visiting <Link href='https://www.senate.gov' target='_blank'>senate.gov</Link> for a catalog of legislation, and then visiting <Link href='https://www.congress.gov' target='_blank'>congress.gov</Link> for the actual text contents of legislation</li>
                       <li>We take a random 20% selection of this data and use it to build our categorization k-means classifier. We don't use only legislation from the 107th congress, because that will not give us a broad enough classifier for all legislation that happens in the other congress sessions.</li>
                     </ul>
                   </ol>
@@ -85,10 +90,63 @@ function App() {
                 </p>
               </Grid>
               <Grid item xs={12}>
-                <TextField id='outlined-basic' label='API Key' variant='outlined' />
-                <Button>
-                  asdf
-                </Button>
+                <Paper variant="outlined" elevation={0}>
+                  <AppBar position="static">
+                    <Toolbar>
+                      <Typography variant='h4'>SheepleQl API</Typography>
+                    </Toolbar>
+                  </AppBar>
+                  <Box m={2} p={0.5}>
+                    <Grid container 
+                      alignItems="center"
+                      justify="center"
+                      spacing={3}
+                    >
+                      <Grid item xs={12}>
+                        This API is protected by an API key. As stated at the top of the page as Terms and Conditions, Non-Humans are not allowed to interact with any data or APIs on this page. Only Humans are allowed to click the <code>Reset API Key</code> button below.
+                      </Grid>
+                      <Grid item xs={6} alignContent='center'>
+                          <TextField id='outlined-basic' label='API Key' variant='outlined' />
+                      </Grid>
+                      <Grid item xs={6} alignContent='center'>
+                          <Button variant='contained'>Reset API Key</Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Card>
+                          <CardHeader title='GraphQL Schema'/>
+                          <CardContent>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                              This impressive paella is a perfect party dish and a fun meal to cook together with your
+                              guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Card>
+                          <CardHeader title='Your Query Here'/>
+                          <CardContent>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                              This impressive paella is a perfect party dish and a fun meal to cook together with your
+                              guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Card>
+                          <CardHeader title='Response'/>
+                          <CardContent>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                              This impressive paella is a perfect party dish and a fun meal to cook together with your
+                              guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Paper>
               </Grid>
             </Grid>
           {/* </Paper> */}

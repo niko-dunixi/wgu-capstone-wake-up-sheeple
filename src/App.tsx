@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState }  from 'react';
-import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent, TableBody} from '@material-ui/core';
+import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent, TableBody, ButtonGroup} from '@material-ui/core';
+import { stringify } from 'querystring';
 
 const apiUrl : string = "https://olbgmke76vfizf5twmrsz3mjxy.appsync-api.us-west-2.amazonaws.com/graphql";
 
@@ -64,26 +65,60 @@ type ShadowGovernment {
 
 schema {
   query: Query
-}`
+}`;
 
-const queryDefault: string = `query MyQuery {
-  __typename ## Placeholder value
-}
-`
-
-const queryPredictedAliens: string = `query MyQuery {
-  list_predictions(faction: ALIEN) {
-    congress
-    lis_member_id
-    faction
+const namedQueryTuples: [string, string][] = [
+  ["Default Placeholder Query", `query MyQuery {
+    __typename ## Placeholder value
+  }`],
+  ["List Predicted Aliens Query", `query MyQuery {
+    list_predictions(faction: ALIEN) {
+      congress
+      lis_member_id
+      faction
+    }
+  }`],
+  ["List Senators Query", `query MyQuery {
+    list_senators {
+      lis_member_id
+      first_name
+      last_name
+      congresses_involved
+    }
+  }`],
+  ["List Categorized 116th Congress Legislation", `query MyQuery {
+    list_legislation(congress: 116) {
+      congress
+      session
+      vote_number
+      category
+    }
+  }`],
+  ["Show Senator S010 Details and List Predicted Factions (Composite Query)", `query MyQuery {
+    senator(lis_member_id: "S010") {
+      last_name
+      first_name
+    }
+    list_predictions(lis_member_id: "S010") {
+      congress
+      faction
+    }
   }
-}
-`
+  `],
+];
 
 const App:FunctionComponent<{}> = ({}) => {
   const [apiKey, setApiKey] = useState('');
-  const [userQuery, setUserQuery] = useState(queryDefault);
+  const [userQuery, setUserQuery] = useState(namedQueryTuples[0][1]);
   const [apiResponse, setResponse] = useState('');
+
+  const queryExampleButtons = namedQueryTuples.map((tuple: [string, string]) => {
+    const label = tuple[0];
+    const query = tuple[1];
+    return (
+      <Button onClick={() => setUserQuery(query)}>{label}</Button>
+    )
+  })
 
   return (
     <div>
@@ -183,17 +218,24 @@ const App:FunctionComponent<{}> = ({}) => {
                 <Box m={2} p={0.5}>
                   <Grid container 
                     alignItems="center"
-                    justify="center"
+                    justify="space-evenly"
                     spacing={3}
                   >
                     <Grid item xs={12}>
                       This API is protected by an API key. As stated at the top of the page as Terms and Conditions, Non-Humans are not allowed to interact with any data or APIs on this page. Only Humans are allowed to click the <code>Reset API Key</code> button below.
                     </Grid>
-                    <Grid item xs={6}>
-                        <TextField id='outlined-basic' label='API Key' variant='outlined' value={apiKey}/>
+                    <Grid item xs={12}>
+                      <TextField label='API URL' variant='outlined' defaultValue={apiUrl} disabled={true} fullWidth={true} />
                     </Grid>
                     <Grid item xs={6}>
-                        <Button variant='contained' onClick={() => setApiKey(defaultApiKey)}>Reset API Key</Button>
+                        <TextField label='API Key' variant='outlined' value={apiKey} fullWidth={true} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                          fullWidth={true}
+                          color='primary'
+                          variant='contained'
+                          onClick={() => setApiKey(defaultApiKey)}>Reset API Key</Button>
                     </Grid>
                     <Grid item xs={4}>
                       <Card>
@@ -224,24 +266,42 @@ const App:FunctionComponent<{}> = ({}) => {
                     </Grid>
                     <Grid item xs={4}>
                       <Card>
+                        <CardHeader title='Example Queries'/>
+                        <CardContent>
+                          <Box m={2}>
+                            <ButtonGroup
+                              fullWidth={true}
+                              orientation='vertical'
+                              color='primary'
+                              aria-label='vertical contained primary button group'
+                              variant='contained'
+                            >
+                              {queryExampleButtons}
+                            </ButtonGroup>
+                          </Box>
+
+                          <Button
+                            fullWidth={true}
+                            color='secondary'
+                            variant='contained'
+                            onClick={() => {}}>
+                              Execute Query
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Card>
                         <CardHeader title='Response'/>
                         <CardContent>
                         <TextField
+                            fullWidth={true}
                             multiline
                             rows={25}
                             variant='outlined'
                             value={apiResponse}
                             disabled={true}
                           />
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Card>
-                        <CardHeader title='Example Queries'/>
-                        <CardContent>
-                          <Button variant='contained' onClick={() => setUserQuery(queryDefault)}>Default Placeholder Query</Button>
-                          <Button variant='contained' onClick={() => setUserQuery(queryPredictedAliens)}>Show Predicted Alien Senators in Congress</Button>
                         </CardContent>
                       </Card>
                     </Grid>

@@ -20,7 +20,7 @@ build: node_modules
 
 deploy: build
 	aws s3 sync ./build/ s3://main-wgu-capstone-corpus-wakeupsheeplewebsitebuck-qq700grvjn8l
-	aws cloudfront create-invalidation --distribution-id E3N3UDUW1AS08R --paths "/index.html"
+	aws cloudfront create-invalidation --distribution-id E3N3UDUW1AS08R --paths "/*"
 
 start: node_modules
 	$(NODE) npm run start

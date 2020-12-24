@@ -25,7 +25,7 @@ function App() {
                   They walk amongst us. They want to rule us. The lizard-people are in the US Government.
                 </p>
                 <p>
-                  <Link href='https://web.archive.org/web/20021010174545/http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>In 2002</Link>, <Link href='http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>a brave and very credible website</Link> leaked a list of known agents in the 107th congress. We can use this list and couple it with machine learning techniques to determine based on voting patterns who is and isn't a malicious actor.
+                  <Link href='https://web.archive.org/web/20021010174545/http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>In 2002</Link>, <Link href='http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>a brave and very credible website</Link> leaked a list of known agents in the 107th congress. We can use this list and couple it with machine learning techniques to determine based on voting patterns who is and isn't a malicious actor. The known factions (our target classification for any given senator) are <code>REPTILE</code>, <code>ALIEN</code>, <code>PLEIADEAN</code>, and <code>HUMAN</code>.
                 </p>
                 <p>
                   At a high level, the algorithm is as follows:
@@ -62,7 +62,26 @@ function App() {
                       </TableRow>
                     </Table>
                   </TableContainer>
-                  
+                  <ol start={2}>
+                    <li>We create our training data from the 107th congress, which we have known leaked factions with their corresponding senators.</li>
+                    <ul>
+                      <li>Each senator may vote: yay, nay, or abstain (usually they are absent in this instance) which we can correlate to +1, -1, and 0 respectively. Thus if a senator votes for two pieces of legislation (both with the same category) the score for that category is +2.</li>
+                    </ul>
+                    <li>With the training data, we create a neural net (using MLPClassifier as our implementation) and learn for what given category, a given faction will vote</li>
+                    <ul>
+                      <li>Thus, we learn if the Reptilians typically vote for or against a category, we can take an uncategorized senator and determine based on their votes if they are of a given faction</li>
+                    </ul>
+                    <li>For each congress (EG: 101, 102, 103 and so on through 116), discluding our source of truth (congress 107) we can take the categorized legislation and for every given senator, sum their votes for a that category.</li>
+                    <li>
+                      Finally, we must coalese this information. During this process we store it in a number of places
+                      <ul>
+                        <li><Link href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html' target='_blank'>Amazon DynamoDB</Link></li>
+                        <li><Link href='https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html'>Amazon S3</Link></li>
+                        <li><Link href='https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html' target='_blank'>Amazon RDS - Aurora Serverless</Link></li>
+                      </ul>
+                      all of which help support a sporradic and unpredictable work-load. This unfortunately makes querying this information diffcult via normal REST style API architectures. Fortunately, GraphQL was created to solve this problem of discrete data needing to be queried by a singular (yet evolving) client. For this we use <Link href='https://docs.aws.amazon.com/appsync/latest/devguide/welcome.html' target='_blank'>Amazon AppSync</Link> which allows the end user to query the data in almost totally arbitrary manors and get exactly what they need (no more and no less).
+                    </li>
+                  </ol>
                 </p>
               </Grid>
               <Grid item xs={12}>

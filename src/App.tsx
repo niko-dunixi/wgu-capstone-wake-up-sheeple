@@ -2,6 +2,67 @@ import React from 'react';
 import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent} from '@material-ui/core';
 
 function App() {
+  const schemaStringValue : string = `type CategorizedLegislation {
+    congress: Int!
+    session: Int!
+    vote_number: String!
+    category: String!
+  }
+  
+  enum Faction {
+    HUMAN
+    REPTILE
+    ALIEN
+    PLEIADEAN
+  }
+  
+  type Leaked {
+    congress: Int!
+    senators: [LeakedSenator!]!
+  }
+  
+  type LeakedSenator {
+    lis_member_id: String!
+    faction: Faction!
+  }
+  
+  type Legislation {
+    congress: Int!
+    session: Int!
+    vote_number: String!
+    title: String!
+  }
+  
+  type Prediction {
+    congress: Int!
+    lis_member_id: String!
+    faction: Faction!
+  }
+  
+  type Query {
+    senator(lis_member_id: String!): Senator!
+    list_senators: [Senator!]!
+    legislation(congress: Int!, session: Int!, vote_number: String!): Legislation!
+    list_legislation(congress: Int, session: Int): [CategorizedLegislation!]!
+    list_leaked_shadow_government: [Leaked!]!
+    list_predictions(congress: Int, lis_member_id: String, faction: Faction): [Prediction!]!
+  }
+  
+  type Senator {
+    lis_member_id: String!
+    first_name: String!
+    last_name: String!
+    congresses_involved: [Int!]!
+  }
+  
+  type ShadowGovernment {
+    list_leaked: [Leaked!]!
+  }
+  
+  schema {
+    query: Query
+  }`
+
   return (
     <div>
       <AppBar position='static'>
@@ -115,10 +176,13 @@ function App() {
                         <Card>
                           <CardHeader title='GraphQL Schema'/>
                           <CardContent>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                              This impressive paella is a perfect party dish and a fun meal to cook together with your
-                              guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                            </Typography>
+                          <TextField
+                            multiline
+                            rows={25}
+                            defaultValue={schemaStringValue}
+                            variant='filled'
+                            disabled={true}
+                          />
                           </CardContent>
                         </Card>
                       </Grid>
@@ -126,10 +190,15 @@ function App() {
                         <Card>
                           <CardHeader title='Your Query Here'/>
                           <CardContent>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                              This impressive paella is a perfect party dish and a fun meal to cook together with your
-                              guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                            </Typography>
+                            <TextField
+                              multiline
+                              rows={25}
+                              defaultValue='query MyQuery {
+                                __typename ## Placeholder value
+                              }
+                              '
+                              variant='outlined'
+                            />
                           </CardContent>
                         </Card>
                       </Grid>
@@ -137,10 +206,12 @@ function App() {
                         <Card>
                           <CardHeader title='Response'/>
                           <CardContent>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                              This impressive paella is a perfect party dish and a fun meal to cook together with your
-                              guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                            </Typography>
+                          <TextField
+                              multiline
+                              rows={25}
+                              variant='outlined'
+                              disabled={true}
+                            />
                           </CardContent>
                         </Card>
                       </Grid>

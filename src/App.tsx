@@ -70,6 +70,14 @@ const namedQueryTuples: [string, string][] = [
   ["Default Placeholder Query", `query MyQuery {
     __typename ## Placeholder value
   }`],
+  ["List Leaked Data", `query MyQuery {
+    list_leaked_shadow_government {
+      senators {
+        faction
+        lis_member_id
+      }
+    }
+  }`],
   ["List Predicted Aliens Query", `query MyQuery {
     list_predictions(faction: ALIEN) {
       congress

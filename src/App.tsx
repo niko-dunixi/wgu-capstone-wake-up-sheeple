@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState }  from 'react';
-import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent, TableBody, ButtonGroup} from '@material-ui/core';
+import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent, TableBody, ButtonGroup, LinearProgress} from '@material-ui/core';
 import { stringify } from 'querystring';
 
 const apiUrl : string = "https://olbgmke76vfizf5twmrsz3mjxy.appsync-api.us-west-2.amazonaws.com/graphql";
@@ -111,8 +111,12 @@ const App:FunctionComponent<{}> = ({}) => {
   const [apiKey, setApiKey] = useState('');
   const [userQuery, setUserQuery] = useState(namedQueryTuples[0][1]);
   const [apiResponse, setResponse] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const executeQuery = (query: string) => {
+    setIsLoading(true);
+    setIsError(false);
     fetch(apiUrl, {
       method: 'post',
       headers: {
@@ -121,9 +125,31 @@ const App:FunctionComponent<{}> = ({}) => {
       },
       body: JSON.stringify({'query': query}),
     })
-    .then(response => response.json())
-    .then(jsonData => setResponse(JSON.stringify(jsonData['data'], null, 2)))
+    .then(response => {
+      setIsLoading(false);
+      return response.json()
+    })
+    .then(jsonData => {
+      if ('data' in jsonData) {
+        setResponse(JSON.stringify(jsonData['data'], null, 2));
+      } else {
+        setIsError(true);
+        setResponse(JSON.stringify(jsonData, null, 2));
+      }
+    })
+    .catch((error) => {
+      setIsError(true);
+      try {
+        console.log(error);
+        const jsonErrorObject = JSON.parse(error);
+        setResponse(JSON.stringify(jsonErrorObject, null, 2));
+      } catch (e) {
+        setResponse(error);
+      }
+    });
   };
+
+  const loadingElement = isLoading ? (<LinearProgress variant='indeterminate' />) : (<div></div>);
 
   const queryExampleButtons = namedQueryTuples.map((tuple: [string, string]) => {
     const label = tuple[0];
@@ -305,9 +331,11 @@ const App:FunctionComponent<{}> = ({}) => {
                     </Grid>
                     <Grid item xs={12}>
                       <Card>
-                        <CardHeader title='Response'/>
+                        <CardHeader title='Response' />
                         <CardContent>
-                        <TextField
+                          {loadingElement}
+                          <TextField
+                            error={isError}
                             fullWidth={true}
                             multiline
                             rows={25}
@@ -315,6 +343,7 @@ const App:FunctionComponent<{}> = ({}) => {
                             value={apiResponse}
                             disabled={true}
                           />
+                          {loadingElement}
                         </CardContent>
                       </Card>
                     </Grid>

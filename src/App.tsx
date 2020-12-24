@@ -66,14 +66,23 @@ schema {
   query: Query
 }`
 
-const placeholderQueryString: string = `query MyQuery {
+const queryDefault: string = `query MyQuery {
   __typename ## Placeholder value
+}
+`
+
+const queryPredictedAliens: string = `query MyQuery {
+  list_predictions(faction: ALIEN) {
+    congress
+    lis_member_id
+    faction
+  }
 }
 `
 
 const App:FunctionComponent<{}> = ({}) => {
   const [apiKey, setApiKey] = useState('');
-  const [userQuery, setUserQuery] = useState(placeholderQueryString);
+  const [userQuery, setUserQuery] = useState(queryDefault);
   const [apiResponse, setResponse] = useState('');
 
   return (
@@ -207,7 +216,6 @@ const App:FunctionComponent<{}> = ({}) => {
                           <TextField
                             multiline
                             rows={25}
-                            defaultValue={placeholderQueryString}
                             value={userQuery}
                             variant='outlined'
                           />
@@ -232,8 +240,8 @@ const App:FunctionComponent<{}> = ({}) => {
                       <Card>
                         <CardHeader title='Example Queries'/>
                         <CardContent>
-                          <Button variant='contained' onClick={() => setUserQuery(placeholderQueryString)}>Default Placeholder Query</Button>
-                          <Button variant='contained' onClick={() => setUserQuery('asfdasfd')}>Show Predicted Alien Senetors in the 103rd Congress</Button>
+                          <Button variant='contained' onClick={() => setUserQuery(queryDefault)}>Default Placeholder Query</Button>
+                          <Button variant='contained' onClick={() => setUserQuery(queryPredictedAliens)}>Show Predicted Alien Senators in Congress</Button>
                         </CardContent>
                       </Card>
                     </Grid>

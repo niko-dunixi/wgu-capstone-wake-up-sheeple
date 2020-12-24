@@ -282,7 +282,7 @@ const App:FunctionComponent<{}> = ({}) => {
                           variant='contained'
                           onClick={() => setApiKey(defaultApiKey)}>Reset API Key (Humans Only!)</Button>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xl={4}>
                       <Card>
                         <CardHeader title='GraphQL Schema'/>
                         <CardContent>
@@ -297,7 +297,7 @@ const App:FunctionComponent<{}> = ({}) => {
                         </CardContent>
                       </Card>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xl={4}>
                       <Card>
                         <CardHeader title='Your Query Here'/>
                         <CardContent>
@@ -312,7 +312,7 @@ const App:FunctionComponent<{}> = ({}) => {
                         </CardContent>
                       </Card>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xl={4}>
                       <Card>
                         <CardHeader title='Example Queries'/>
                         <CardContent>

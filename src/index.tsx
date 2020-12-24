@@ -4,9 +4,26 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+// import blue from '@material-ui/core/colors/blue';
+
+const theme = createMuiTheme({
+  palette: {
+    // type: 'dark',
+    primary: {
+      main: '#039be5',
+    },
+    secondary: {
+      main: '#00e676',
+    }
+  },
+});
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <MuiThemeProvider theme={theme}>
+      <App />
+    </MuiThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

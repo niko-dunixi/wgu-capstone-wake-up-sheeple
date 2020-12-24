@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState }  from 'react';
-import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent, TableBody, ButtonGroup, LinearProgress} from '@material-ui/core';
-import { stringify } from 'querystring';
+import { AppBar, Container, TextField, Toolbar, Typography, Paper, Box, Grid, Button, Link , Table, TableContainer, TableHead, TableRow, TableCell, Card, CardHeader, CardContent, TableBody, ButtonGroup, LinearProgress, createMuiTheme} from '@material-ui/core';
 
 const apiUrl : string = "https://olbgmke76vfizf5twmrsz3mjxy.appsync-api.us-west-2.amazonaws.com/graphql";
 
@@ -94,7 +93,7 @@ const namedQueryTuples: [string, string][] = [
       category
     }
   }`],
-  ["Show Senator S010 Details and List Predicted Factions (Composite Query)", `query MyQuery {
+  ["Show Senator S010 Details and List Predicted Factions (Composite Query, Way Cool!)", `query MyQuery {
     senator(lis_member_id: "S010") {
       last_name
       first_name
@@ -113,10 +112,12 @@ const App:FunctionComponent<{}> = ({}) => {
   const [apiResponse, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorHint, setErrorHint] = useState('');
 
   const executeQuery = (query: string) => {
     setIsLoading(true);
     setIsError(false);
+    setErrorHint('');
     fetch(apiUrl, {
       method: 'post',
       headers: {
@@ -127,6 +128,9 @@ const App:FunctionComponent<{}> = ({}) => {
     })
     .then(response => {
       setIsLoading(false);
+      if (response.status == 401) {
+        setErrorHint('Did you remember to reset the API Key?')
+      }
       return response.json()
     })
     .then(jsonData => {
@@ -134,6 +138,7 @@ const App:FunctionComponent<{}> = ({}) => {
         setResponse(JSON.stringify(jsonData['data'], null, 2));
       } else {
         setIsError(true);
+        
         setResponse(JSON.stringify(jsonData, null, 2));
       }
     })
@@ -159,6 +164,7 @@ const App:FunctionComponent<{}> = ({}) => {
     )
   })
 
+  const boxMargin = 0.75;
   return (
     <div>
       <AppBar position='static'>
@@ -177,18 +183,18 @@ const App:FunctionComponent<{}> = ({}) => {
         <Box m={3} p={4}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <div>
+              <Box m={boxMargin}>
                 They walk amongst us. They want to rule us. The lizard-people are in the US Government.
-              </div>
-              <div>
+              </Box>
+              <Box m={boxMargin} p={3}>
                 <Typography variant='caption'>
-                  NOTE: This page and all it's related data are for the senses of Humans only. By interacting with this page and its related APIs you agree that you are Human. Non-humans must close the page, because they are bound and compeled to do so.
+                  NOTE: This page and all it's related data are for Humans only. By interacting with this page and its related APIs you agree that you are Human. Non-humans must close the page, because they are bound and compeled to do so.
                 </Typography>
-              </div>
-              <div>
+              </Box>
+              <Box m={boxMargin}>
                 <Link href='https://web.archive.org/web/20021010174545/http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>In 2002</Link>, <Link href='http://www.thewatcherfiles.com/exposing_reptilians.htm' target='_blank'>a brave and very credible website</Link> leaked a list of known agents in the 107th congress. We can use this list and couple it with machine learning techniques to determine based on voting patterns who is and isn't a malicious actor. The known factions (our target classification for any given senator) are <code>REPTILE</code>, <code>ALIEN</code>, <code>PLEIADEAN</code>, and <code>HUMAN</code>.
-              </div>
-              <div>
+              </Box>
+              <Box m={boxMargin}>
                 At a high level, the algorithm is as follows:
                 <ol>
                   <li>Aggregate legislation from all congresses and classify it</li>
@@ -245,7 +251,7 @@ const App:FunctionComponent<{}> = ({}) => {
                     all of which help support a sporradic and unpredictable work-load. This unfortunately makes querying this information diffcult via normal REST style API architectures. Fortunately, GraphQL was created to solve this problem of discrete data needing to be queried by a singular (yet evolving) client. For this we use <Link href='https://docs.aws.amazon.com/appsync/latest/devguide/welcome.html' target='_blank'>Amazon AppSync</Link> which allows the end user to query the data in almost totally arbitrary manors and get exactly what they need (no more and no less).
                   </li>
                 </ol>
-              </div>
+              </Box>
             </Grid>
             <Grid item xs={12}>
               <Paper variant="outlined" elevation={0}>
@@ -267,14 +273,14 @@ const App:FunctionComponent<{}> = ({}) => {
                       <TextField label='API URL' variant='outlined' defaultValue={apiUrl} disabled={true} fullWidth={true} />
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField label='API Key' variant='outlined' value={apiKey} fullWidth={true} />
+                        <TextField label='API Key' variant='outlined' value={apiKey} fullWidth={true} onChange={(event) => {setApiKey(event.target.value)}} />
                     </Grid>
                     <Grid item xs={6}>
                         <Button
                           fullWidth={true}
                           color='primary'
                           variant='contained'
-                          onClick={() => setApiKey(defaultApiKey)}>Reset API Key</Button>
+                          onClick={() => setApiKey(defaultApiKey)}>Reset API Key (Humans Only!)</Button>
                     </Grid>
                     <Grid item xs={4}>
                       <Card>
@@ -286,6 +292,7 @@ const App:FunctionComponent<{}> = ({}) => {
                           defaultValue={schemaStringValue}
                           variant='filled'
                           disabled={true}
+                          fullWidth={true}
                         />
                         </CardContent>
                       </Card>
@@ -298,7 +305,9 @@ const App:FunctionComponent<{}> = ({}) => {
                             multiline
                             rows={25}
                             value={userQuery}
+                            onChange={(event) => {setUserQuery(event.target.value)}}
                             variant='outlined'
+                            fullWidth={true}
                           />
                         </CardContent>
                       </Card>
@@ -324,7 +333,7 @@ const App:FunctionComponent<{}> = ({}) => {
                             color='secondary'
                             variant='contained'
                             onClick={() => {executeQuery(userQuery)}}>
-                              Execute Query
+                              Execute Query<br/>(Definitely Humans Only!)
                           </Button>
                         </CardContent>
                       </Card>
@@ -335,13 +344,13 @@ const App:FunctionComponent<{}> = ({}) => {
                         <CardContent>
                           {loadingElement}
                           <TextField
+                            label={isError ? 'Oh no! ' + errorHint: ''}
                             error={isError}
                             fullWidth={true}
                             multiline
                             rows={25}
                             variant='outlined'
                             value={apiResponse}
-                            disabled={true}
                           />
                           {loadingElement}
                         </CardContent>

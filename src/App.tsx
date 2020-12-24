@@ -112,6 +112,19 @@ const App:FunctionComponent<{}> = ({}) => {
   const [userQuery, setUserQuery] = useState(namedQueryTuples[0][1]);
   const [apiResponse, setResponse] = useState('');
 
+  const executeQuery = (query: string) => {
+    fetch(apiUrl, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/graphql',
+        'x-api-key': apiKey,
+      },
+      body: JSON.stringify({'query': query}),
+    })
+    .then(response => response.json())
+    .then(jsonData => setResponse(JSON.stringify(jsonData['data'], null, 2)))
+  };
+
   const queryExampleButtons = namedQueryTuples.map((tuple: [string, string]) => {
     const label = tuple[0];
     const query = tuple[1];
@@ -284,7 +297,7 @@ const App:FunctionComponent<{}> = ({}) => {
                             fullWidth={true}
                             color='secondary'
                             variant='contained'
-                            onClick={() => {}}>
+                            onClick={() => {executeQuery(userQuery)}}>
                               Execute Query
                           </Button>
                         </CardContent>

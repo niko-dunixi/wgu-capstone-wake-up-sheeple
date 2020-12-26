@@ -275,7 +275,8 @@ const App:FunctionComponent<{}> = ({}) => {
                     spacing={3}
                   >
                     <Grid item xs={12}>
-                      This API is protected by an API key. As stated at the top of the page as Terms and Conditions, Non-Humans are not allowed to interact with any data or APIs on this page. Only Humans are allowed to click the <code>Reset API Key</code> button below.
+                      <Typography variant='h3'>Terms and Conditions</Typography>
+                      Non-Humans are not allowed to interact with (either directly or with proxy) to any data or APIs on this page. The API is free to use for non-comericial individual use only. Otherwise (if comercial or non-individual) an API key must be perchased.
                     </Grid>
                     <Grid item xs={12}>
                       <TextField label='API URL' variant='outlined' defaultValue={apiUrl} disabled={true} fullWidth={true} />
@@ -288,7 +289,7 @@ const App:FunctionComponent<{}> = ({}) => {
                           fullWidth={true}
                           color='primary'
                           variant='contained'
-                          onClick={() => setApiKey(defaultApiKey)}>Reset API Key (Humans Only!)</Button>
+                          onClick={() => setApiKey(defaultApiKey)}>Free Individual Non Compercial Use API Key (Humans only!)</Button>
                     </Grid>
                     <Grid item xl={4}>
                       <Card>
